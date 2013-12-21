@@ -1,0 +1,41 @@
+.box:not(:last-child):after {
+  content: "\25CF\25CF\25CF";
+  display: block;
+  font-size: 150%;
+  text-align: center;
+  color: rgba(0,0,0,0.2);
+  letter-spacing: 0.4em;
+}
+
+.temperature * {
+  float:left;
+}
+
+.temperature-plot {
+  width: 86%;
+  height: 2em;
+}
+
+.temperature-inside,
+.temperature-outside {
+  display: inline-block;
+  width: 7%;
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.temperature-inside:after,
+.temperature-outside:after {
+  font-family: 'Glyphicons Halflings';
+  -webkit-font-smoothing: antialiased;
+  display: block;
+  width: 100%;
+}
+
+.temperature-outside:after {
+  content: "\2601";
+}
+
+.temperature-inside:after {
+  content: "\e021";
+}
