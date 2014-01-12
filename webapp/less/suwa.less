@@ -1,0 +1,54 @@
+@import "icons";
+
+.box:not(:last-child):after {
+  content: "\25CF  \25CF  \25CF";
+  display: block;
+  font-size: 150%;
+  text-align: center;
+  color: rgba(0,0,0,0.2);
+}
+
+.temperature * {
+  float:left;
+}
+
+.temperature-plot {
+  width: 86%;
+  height: 2em;
+}
+
+.temperature-inside,
+.temperature-outside {
+  display: inline-block;
+  width: 7%;
+  text-align: center;
+}
+
+.temperature-inside:after,
+.temperature-outside:after {
+  font-family: 'Glyphicons Halflings';
+  -webkit-font-smoothing: antialiased;
+  display: block;
+  width: 100%;
+}
+
+.temperature-outside:after {
+  .icon;
+  content: "\e600";
+}
+
+.temperature-inside:after {
+  .icon;
+  content: "\e605";
+}
+
+.box {
+    text-align: center;
+}
+
+.btn {
+    padding: 0.5em;
+    background: #fff;
+    border-radius: 0.5em;
+    border: 1px solid #000;
+}
