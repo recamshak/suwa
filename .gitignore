@@ -1,1 +1,2 @@
-webapp/api/node_modules
+webapp/node_modules
+webapp/less/*.css
