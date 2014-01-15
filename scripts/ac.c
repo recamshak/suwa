@@ -8,6 +8,8 @@
 
 #define PULSE_BIT       0x01000000
 
+int debug = 0;
+
 typedef enum {
   false,
   true
@@ -64,8 +66,8 @@ typedef struct ir_signal {
 
 const ir_data ir_data_default = {
   0x55, 0x5A, 0xF3, 0x08, // ID
-  0x00, 0x88, 0x80, 0x00,
-  0x10, 0x01, 0x00, 0x07,
+  0x00, 0x8C, 0x40, 0x00,
+  0x10, 0x01, 0x20, 0x07,
   0x80
 };
 
@@ -73,6 +75,21 @@ const ir_data ir_data_default = {
 void get_data(const command *cmd, ir_data *data) {
   memcpy(data, &ir_data_default, sizeof(ir_data));
 
+  data->data[6] |= cmd->mode;
+
+  // get the temperature code
+  int temperature = cmd->temperature - 17;
+  int temperature_code = 0;
+
+  // reverse the bit order
+  int i;
+  for (i = 0; i < 4; i++) {
+    temperature_code <<= 1;
+    temperature_code |= (0x01 & temperature);
+    temperature >>= 1;
+  }
+
+  data->data[4] |= temperature_code << 4;
 
   data_update_checksum(data);
 }
@@ -104,6 +121,10 @@ void get_signal(const ir_data *data, ir_signal *signal) {
     byte = data->data[i];
 
     for (bit = 0; bit < 8; bit++) {
+      if (debug) {
+	printf("%d",  ((byte << bit) & 0x80) != 0);
+      }
+
       if ((byte << bit) & 0x80) {
         signal->signal[signal_idx++] = ONE[0];
         signal->signal[signal_idx++] = ONE[1];
@@ -248,6 +269,9 @@ static struct argp_option options[] = {
    {"ion", 'i', 0, 0,
     "Activate the Ion Plasmacluster"},
 
+   {"debug", 'd', 0, 0,
+    "Display debug information"},
+
    { 0 }
 };
 
@@ -262,6 +286,10 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
    {
    case 't':
      arguments->cmd.temperature = atoi(arg);
+     break;
+
+   case 'd':
+     debug = 1;
      break;
 
    case ARGP_KEY_ARG:
